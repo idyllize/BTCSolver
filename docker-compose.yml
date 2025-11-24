@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  solver:
+    build: .
+    image: p71-solver:latest
+    container_name: p71-solver
+    restart: unless-stopped
+    environment:
+      DATA_DIR: /data
+      PROGRESS_WEBHOOK_URLS: "${PROGRESS_WEBHOOK_URLS}"
+      HIT_WEBHOOK_URLS: "${HIT_WEBHOOK_URLS}"
+      REDIS_URL: "${REDIS_URL}"
+      SHARD_ID: "${SHARD_ID:-1}"
+      TOTAL_SHARDS: "${TOTAL_SHARDS:-1}"
+      METRICS_PORT: "9545"
+      WEBHOOK_PERIOD: "300"
+      PROCESSES: "${PROCESSES:-}"
+      BATCH_SIZE: "${BATCH_SIZE:-}"
+      FORCE_IPV4: "true"
+      AUTOSLOW: "true"
+      CACHE_GUARD: "true"
+      CACHE_THRESHOLD_GB: "8.0"
+      CACHE_COOLDOWN: "120.0"
+      CACHE_HYSTERESIS: "1.0"
+      CACHE_CONSEC: "3"
+      CACHE_ADAPT_BATCH: "true"
+    ports:
+      - "9545:9545"
+    volumes:
+      - ./data:/data

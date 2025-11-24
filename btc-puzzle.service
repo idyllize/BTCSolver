@@ -1,0 +1,16 @@
+[Unit]
+Description=Bitcoin Puzzle 71 Solver
+After=network.target
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/btc-puzzle
+ExecStart=/home/user/btc-puzzle/venv/bin/python /home/user/btc-puzzle/solver.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

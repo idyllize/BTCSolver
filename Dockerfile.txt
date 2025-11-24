@@ -1,0 +1,27 @@
+# GCE C4 Masterpiece — Container image
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc make libssl-dev libgmp-dev curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+COPY solver.py /app/solver.py
+
+# Runtime env (override with docker run -e ...)
+ENV DATA_DIR=/data \
+    METRICS_PORT=9545 \
+    WEBHOOK_PERIOD=300 \
+    CACHE_GUARD=true \
+    AUTOSLOW=true
+
+VOLUME ["/data"]
+EXPOSE 9545
+
+CMD ["python", "/app/solver.py"]
